@@ -96,6 +96,16 @@ prompt_pure_string_length_to_var() {
 	typeset -g "${var}"="${length}"
 }
 
+prompt_pure_reset_prompt() {
+	if [[ $CONTEXT = cont ]]; then
+		# When the context is cont, PS2 is active and calling
+		# reset-prompt will have no effect on PS1.
+		return
+	fi
+
+	zle .reset-prompt
+}
+
 prompt_pure_preprompt_render() {
 	setopt localoptions noshwordsplit
 
@@ -156,7 +166,7 @@ prompt_pure_preprompt_render() {
 
 	if [[ $1 != precmd ]] && [[ $prompt_pure_last_prompt != $expanded_prompt ]]; then
 		# Redraw the prompt.
-		zle && zle .reset-prompt
+		zle && zle prompt-pure-reset-prompt
 	fi
 
 	prompt_pure_last_prompt=$expanded_prompt
@@ -455,6 +465,10 @@ prompt_pure_setup() {
 
 	# prompt turns red if the previous command didn't exit with 0
 	PROMPT='%(?.%F{magenta}.%F{red})${PURE_PROMPT_SYMBOL:-❯}%f '
+	PROMPT2='%F{242}%_%f %(?.%F{magenta}.%F{red})${PURE_PROMPT_SYMBOL:-❯}%f '
+
+	# Register our custom prompt reset function.
+	zle -N prompt-pure-reset-prompt prompt_pure_reset_prompt
 }
 
 prompt_pure_setup "$@"
