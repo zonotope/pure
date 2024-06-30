@@ -160,9 +160,6 @@ prompt_pure_preprompt_render() {
                 status_parts+=('%F{$prompt_pure_colors[git:stash]}${PURE_GIT_STASH_SYMBOL:-≡}%f')
         fi
 
-        # Execution time.
-        [[ -n $prompt_pure_cmd_exec_time ]] && status_parts+=('%F{$prompt_pure_colors[execution_time]}${prompt_pure_cmd_exec_time}%f')
-
         local cleaned_ps1=$PROMPT
         local -H MATCH MBEGIN MEND
         if [[ $PROMPT = *$prompt_newline* ]]; then
@@ -177,15 +174,19 @@ prompt_pure_preprompt_render() {
 
         # Construct the new prompt with a clean preprompt.
         local -ah ps1
-        ps1=(
+
+        ## Add the previous command time if set
+        [[ -n $prompt_pure_cmd_exec_time ]] && ps1+=('%F{$prompt_pure_colors[execution_time]}${prompt_pure_cmd_exec_time}%f')
+
+        ## Then add the rest of the prompt components
+        ps1+=(
             $separator
-            $prompt_newline
             $current_status
-            $prompt_newline
             $cleaned_ps1
         )
 
-        PROMPT="${(j..)ps1}"
+        ## Now combine them with newlines
+        PROMPT="${(pj.$prompt_newline.)ps1}"
 
         # Expand the prompt for future comparision.
         local expanded_prompt
