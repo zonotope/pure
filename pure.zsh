@@ -828,7 +828,7 @@ prompt_pure_setup() {
                 host                 242
                 path                 blue
                 prompt:error         red
-                prompt:success       magenta
+                prompt:success       green
                 prompt:continuation  242
                 suspended_jobs       red
                 user                 242
@@ -854,7 +854,7 @@ prompt_pure_setup() {
         PROMPT='%(12V.%F{$prompt_pure_colors[virtualenv]}%12v%f .)'
 
         # Prompt turns red if the previous command didn't exit with 0.
-        local prompt_indicator='%# %(?.%F{$prompt_pure_colors[prompt:success]}.%F{$prompt_pure_colors[prompt:error]})${prompt_pure_state[prompt]}%f '
+        local prompt_indicator='%(?.%F{$prompt_pure_colors[prompt:success]}.%F{$prompt_pure_colors[prompt:error]})%# ${prompt_pure_state[prompt]}%f '
         PROMPT+=$prompt_indicator
 
         # Indicate continuation prompt by … and use a darker color for it.
