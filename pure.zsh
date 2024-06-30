@@ -172,12 +172,16 @@ prompt_pure_preprompt_render() {
         fi
         unset MATCH MBEGIN MEND
 
+        local separator='%F{$prompt_pure_colors[separator]}----------------------------------------%f'
+
         # Construct the new prompt with a clean preprompt.
         local -ah ps1
         ps1=(
-                ${(j. .)preprompt_parts}  # Join parts, space separated.
-                $prompt_newline           # Separate preprompt and prompt.
-                $cleaned_ps1
+            $separator
+            ${prompt_newline}
+            ${(j. .)preprompt_parts}  # Join parts, space separated.
+            $prompt_newline           # Separate preprompt and prompt.
+            $cleaned_ps1
         )
 
         PROMPT="${(j..)ps1}"
@@ -830,6 +834,7 @@ prompt_pure_setup() {
                 prompt:error         red
                 prompt:success       green
                 prompt:continuation  242
+                separator            white
                 suspended_jobs       red
                 user                 242
                 user:root            default
