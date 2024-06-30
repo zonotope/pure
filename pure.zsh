@@ -140,7 +140,7 @@ prompt_pure_preprompt_render() {
         [[ -n $prompt_pure_state[username] ]] && status_parts+=($prompt_pure_state[username])
 
         # Set the path.
-        status_parts+=('%F{${prompt_pure_colors[path]}}%~%f')
+        status_parts+=('%F{${prompt_pure_colors[path]}}$(prompt-pwd)%f')
 
         # Git branch and dirty status info.
         typeset -gA prompt_pure_vcs_info
