@@ -175,8 +175,8 @@ prompt_pure_preprompt_render() {
         # Construct the new prompt with a clean preprompt.
         local -ah ps1
 
-        ## Add the previous command time if set
-        [[ -n $prompt_pure_cmd_exec_time ]] && ps1+=('%F{$prompt_pure_colors[execution_time]}${prompt_pure_cmd_exec_time}%f')
+        ## Add the previous command execution time if set
+        [[ -n $prompt_pure_cmd_exec_time ]] && ps1+=('took %F{$prompt_pure_colors[execution_time]}${prompt_pure_cmd_exec_time}%f')
 
         ## Then add the rest of the prompt components
         ps1+=(
