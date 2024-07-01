@@ -827,18 +827,18 @@ prompt_pure_setup() {
                 execution_time       yellow
                 git:arrow            cyan
                 git:stash            cyan
-                git:branch           242
+                git:branch           magenta
                 git:branch:cached    red
                 git:action           yellow
-                git:dirty            218
-                host                 242
+                git:dirty            magenta
+                host                 white
                 path                 blue
                 prompt:error         red
                 prompt:success       green
-                prompt:continuation  242
+                prompt:continuation  white
                 separator            white
                 suspended_jobs       red
-                user                 242
+                user                 white
                 user:root            default
                 virtualenv           242
         )
