@@ -118,6 +118,14 @@ prompt_pure_set_colors() {
         done
 }
 
+prompt_pure_delimit() {
+    local input="$1"
+    if [[ ! -z $input ]] then
+       delimited='%F{$prompt_pure_colors[delimitter]}[%f'"$input"'%F{$prompt_pure_colors[delimitter]}]%f'
+       print -Rn $delimited
+    fi
+}
+
 prompt_pure_preprompt_render() {
         setopt localoptions noshwordsplit
 
@@ -140,25 +148,31 @@ prompt_pure_preprompt_render() {
         [[ -n $prompt_pure_state[username] ]] && status_parts+=($prompt_pure_state[username])
 
         # Set the path.
-        status_parts+=('%F{${prompt_pure_colors[path]}}$(prompt-pwd)%f')
+
+        local current_path='%F{${prompt_pure_colors[path]}}$(prompt-pwd)%f'
+        status_parts+=($(prompt_pure_delimit $current_path))
 
         # Git branch and dirty status info.
+        local -a git_parts
         typeset -gA prompt_pure_vcs_info
         if [[ -n $prompt_pure_vcs_info[branch] ]]; then
-                status_parts+=("%F{$git_color}"'${prompt_pure_vcs_info[branch]}'"%F{$git_dirty_color}"'${prompt_pure_git_dirty}%f')
+                git_parts+=("%F{$git_color}"'${prompt_pure_vcs_info[branch]}'"%F{$git_dirty_color}"'${prompt_pure_git_dirty}%f')
         fi
         # Git action (for example, merge).
         if [[ -n $prompt_pure_vcs_info[action] ]]; then
-                status_parts+=("%F{$prompt_pure_colors[git:action]}"'$prompt_pure_vcs_info[action]%f')
+                git_parts+=("%F{$prompt_pure_colors[git:action]}"'$prompt_pure_vcs_info[action]%f')
         fi
         # Git pull/push arrows.
         if [[ -n $prompt_pure_git_arrows ]]; then
-                status_parts+=('%F{$prompt_pure_colors[git:arrow]}${prompt_pure_git_arrows}%f')
+                git_parts+=('%F{$prompt_pure_colors[git:arrow]}${prompt_pure_git_arrows}%f')
         fi
         # Git stash symbol (if opted in).
         if [[ -n $prompt_pure_git_stash ]]; then
-                status_parts+=('%F{$prompt_pure_colors[git:stash]}${PURE_GIT_STASH_SYMBOL:-≡}%f')
+                git_parts+=('%F{$prompt_pure_colors[git:stash]}${PURE_GIT_STASH_SYMBOL:-≡}%f')
         fi
+
+        local git_status=${(j. .)git_parts}
+        status_parts+=$(prompt_pure_delimit $git_status)
 
         local cleaned_ps1=$PROMPT
         local -H MATCH MBEGIN MEND
@@ -840,6 +854,7 @@ prompt_pure_setup() {
                 suspended_jobs       red
                 user                 white
                 user:root            default
+                delimitter           white
                 virtualenv           242
         )
         prompt_pure_colors=("${(@kv)prompt_pure_colors_default}")
