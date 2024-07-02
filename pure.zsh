@@ -156,7 +156,7 @@ prompt_pure_preprompt_render() {
         local -a git_parts
         typeset -gA prompt_pure_vcs_info
         if [[ -n $prompt_pure_vcs_info[branch] ]]; then
-                git_parts+=("%F{$git_color}"'${prompt_pure_vcs_info[branch]}'"%F{$git_dirty_color}"'${prompt_pure_git_dirty}%f')
+                git_parts+=("%F{$git_color}"' ${prompt_pure_vcs_info[branch]}'"%F{$git_dirty_color}"'${prompt_pure_git_dirty}%f')
         fi
         # Git action (for example, merge).
         if [[ -n $prompt_pure_vcs_info[action] ]]; then
