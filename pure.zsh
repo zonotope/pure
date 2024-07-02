@@ -616,12 +616,12 @@ prompt_pure_reset_prompt() {
 }
 
 prompt_pure_reset_prompt_symbol() {
-        prompt_pure_state[prompt]=${PURE_PROMPT_SYMBOL:-❯}
+        prompt_pure_state[prompt]=${PURE_PROMPT_SYMBOL:-󰄾}
 }
 
 prompt_pure_update_vim_prompt_widget() {
         setopt localoptions noshwordsplit
-        prompt_pure_state[prompt]=${${KEYMAP/vicmd/${PURE_PROMPT_VICMD_SYMBOL:-❮}}/(main|viins)/${PURE_PROMPT_SYMBOL:-❯}}
+        prompt_pure_state[prompt]=${${KEYMAP/vicmd/${PURE_PROMPT_VICMD_SYMBOL:-󰄽}}/(main|viins)/${PURE_PROMPT_SYMBOL:-󰄾}}
 
         prompt_pure_reset_prompt
 }
@@ -686,7 +686,7 @@ prompt_pure_state_setup() {
         prompt_pure_state[version]="1.23.0"
         prompt_pure_state+=(
                 username "$username"
-                prompt	 "${PURE_PROMPT_SYMBOL:-❯}"
+                prompt	 "${PURE_PROMPT_SYMBOL:-󰄾}"
         )
 }
 
