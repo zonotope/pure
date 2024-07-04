@@ -108,9 +108,6 @@ prompt_pure_preprompt_render() {
         status_parts+='%F{$prompt_pure_colors[suspended_jobs]}✦'
     fi
 
-    # Username and machine, if applicable.
-    [[ -n $prompt_pure_state[username] ]] && status_parts+=($prompt_pure_state[username])
-
     # Set the path.
 
     local current_path='%F{${prompt_pure_colors[path]}}$(prompt-pwd)%f'
@@ -170,6 +167,13 @@ prompt_pure_preprompt_render() {
 
     ## Now combine them with newlines
     PROMPT="${(pj.$prompt_newline.)ps1}"
+
+    ## Set the right prompt
+
+    # Username and machine, if applicable.
+    [[ -n $prompt_pure_state[username] ]] && RPROMPT=($prompt_pure_state[username])
+
+
 
     # Expand the prompt for future comparision.
     local expanded_prompt
