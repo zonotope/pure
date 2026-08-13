@@ -791,6 +791,19 @@ prompt_pure_setup() {
 
         # Set the colors.
         typeset -gA prompt_pure_colors_default prompt_pure_colors
+
+        # Skeleton color. Honor a caller-provided $mid_gray, otherwise derive a
+        # console-safe default (256-color mid-gray, bright-black on 16-color) so
+        # this prompt works standalone.
+        if (( ! ${+mid_gray} )); then
+            local mid_gray
+            if (( ${$(tput colors 2>/dev/null):-0} >= 256 )); then
+                mid_gray=242
+            else
+                mid_gray=8
+            fi
+        fi
+
         prompt_pure_colors_default=(
                 execution_time       yellow
                 git:arrow            cyan
@@ -799,16 +812,16 @@ prompt_pure_setup() {
                 git:branch:cached    red
                 git:action           yellow
                 git:dirty            magenta
-                host                 white
+                host                 ${mid_gray}
                 path                 blue
                 prompt:error         red
                 prompt:success       green
-                prompt:continuation  white
-                separator            white
+                prompt:continuation  ${mid_gray}
+                separator            ${mid_gray}
                 suspended_jobs       red
-                user                 white
+                user                 ${mid_gray}
                 user:root            default
-                delimitter           white
+                delimitter           ${mid_gray}
         )
         prompt_pure_colors=("${(@kv)prompt_pure_colors_default}")
 
