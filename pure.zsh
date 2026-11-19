@@ -1163,6 +1163,7 @@ prompt_pure_setup() {
 		prompt:error         red
 		prompt:success       magenta
 		prompt:continuation  242
+		separator            242
 		suspended_jobs       red
 		user                 242
 		user:root            default
@@ -1211,8 +1212,11 @@ prompt_pure_setup() {
 	#   prefix ✦ user@host ~/Code/pure main* rebase ⇣⇡ ≡ ⬢22 3s suffix
 	#   myenv ❯
 	#
+	# Separator line, marking where each prompt begins.
+	PROMPT='%F{$prompt_pure_colors[separator]}----------------------------------------%f${prompt_newline}'
+
 	# Preprompt line: each %(NV..) section only renders when its psvar is non-empty.
-	PROMPT='%(22V.%F{$prompt_pure_colors[custom:prefix]}%22v%f .)'
+	PROMPT+='%(22V.%F{$prompt_pure_colors[custom:prefix]}%22v%f .)'
 	PROMPT+='%(12V.%F{$prompt_pure_colors[suspended_jobs]}%12v%f .)'
 	local hostname_part=''
 	if (( prompt_pure_state[show_host] )); then
