@@ -1235,7 +1235,8 @@ prompt_pure_setup() {
 	# Prompt line: virtualenv and prompt symbol.
 	PROMPT+='%(20V.%F{$prompt_pure_colors[virtualenv]}%20v%f .)'
 	# Prompt symbol: turns red if the previous command didn't exit with 0.
-	local prompt_indicator='%(?.%F{$prompt_pure_colors[prompt:success]}.%F{$prompt_pure_colors[prompt:error]})${prompt_pure_state[prompt]}%f '
+	# Led by the privilege indicator: `%' normally, `#' as root.
+	local prompt_indicator='%(?.%F{$prompt_pure_colors[prompt:success]}.%F{$prompt_pure_colors[prompt:error]})%# ${prompt_pure_state[prompt]}%f '
 	PROMPT+=$prompt_indicator
 
 	# Indicate continuation prompt by … and use a darker color for it.
