@@ -1212,8 +1212,12 @@ prompt_pure_setup() {
 	#   prefix ✦ user@host ~/Code/pure main* rebase ⇣⇡ ≡ ⬢22 3s suffix
 	#   myenv ❯
 	#
+	# The previous command's execution time, on a line of its own above the
+	# separator, so it reads as the end of that command's output.
+	PROMPT='%(19V.took %F{$prompt_pure_colors[execution_time]}%19v%f${prompt_newline}.)'
+
 	# Separator line, marking where each prompt begins.
-	PROMPT='%F{$prompt_pure_colors[separator]}----------------------------------------%f${prompt_newline}'
+	PROMPT+='%F{$prompt_pure_colors[separator]}----------------------------------------%f${prompt_newline}'
 
 	# Preprompt line: each %(NV..) section only renders when its psvar is non-empty.
 	PROMPT+='%(22V.%F{$prompt_pure_colors[custom:prefix]}%22v%f .)'
@@ -1230,7 +1234,6 @@ prompt_pure_setup() {
 	PROMPT+='%(17V. %F{$prompt_pure_colors[git:arrow]}%17v%f.)'
 	PROMPT+='%(18V. %F{$prompt_pure_colors[git:stash]}%18v%f.)'
 	PROMPT+='%(21V. %F{$prompt_pure_colors[node_version]}%21v%f.)'
-	PROMPT+='%(19V. %F{$prompt_pure_colors[execution_time]}%19v%f.)'
 	PROMPT+='%(23V. %F{$prompt_pure_colors[custom:suffix]}%23v%f.)'
 
 	# Newline separating preprompt from prompt.
