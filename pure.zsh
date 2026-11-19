@@ -134,8 +134,23 @@ prompt_pure_set_colors() {
 	return 0
 }
 
+# Set the path segment: the current path, shortened by Zim's prompt-pwd module
+# when it is loaded (configured through its own zstyles, e.g. `git-root'),
+# otherwise `%~'.  Run on every precmd and on every directory change, so a
+# widget that changes directory and resets the prompt sees the new path.
+prompt_pure_set_path() {
+	setopt localoptions noshwordsplit
+
+	local current_path='%~'
+	if (( $+functions[prompt-pwd] )); then
+		prompt-pwd current_path
+		current_path=${current_path//\%/%%}
+	fi
+	typeset -g prompt_pure_path_segment="%F{${prompt_pure_colors[path]}}${current_path}%f"
+}
+
 prompt_pure_set_path_separator() {
-	typeset -g prompt_pure_path_segment="%F{${prompt_pure_colors[path]}}%~%f"
+	prompt_pure_set_path
 
 	if zstyle -t ':prompt:pure:path:separator' dim; then
 		typeset -g prompt_pure_path_separator_dimmed=1
@@ -1173,6 +1188,7 @@ prompt_pure_setup() {
 
 	add-zsh-hook precmd prompt_pure_precmd
 	add-zsh-hook preexec prompt_pure_preexec
+	add-zsh-hook chpwd prompt_pure_set_path
 
 	prompt_pure_state_setup
 
