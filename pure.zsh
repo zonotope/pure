@@ -210,6 +210,10 @@ prompt_pure_preprompt_render() {
 	psvar[18]=
 	[[ -n $prompt_pure_git_stash ]] && psvar[18]=${PURE_GIT_STASH_SYMBOL-≡}
 
+	# psvar[24]: Git section flag, set when any of psvar[14-18] is.
+	psvar[24]=
+	[[ -n ${psvar[14]}${psvar[15]}${psvar[16]}${psvar[17]}${psvar[18]} ]] && psvar[24]=1
+
 	# psvar[19]: Command execution time.
 	psvar[19]=${prompt_pure_cmd_exec_time}
 
@@ -244,6 +248,7 @@ prompt_pure_preprompt_render() {
 		"${psvar[21]}"
 		"${psvar[22]}"
 		"${psvar[23]}"
+		"${psvar[24]}"
 		"${prompt_pure_state[prompt]}"
 		"${prompt_pure_git_branch_color}"
 		"${PWD}"
@@ -1165,6 +1170,7 @@ prompt_pure_setup() {
 	prompt_pure_colors_default=(
 		custom:prefix        242
 		custom:suffix        242
+		delimiter            242
 		execution_time       yellow
 		git:arrow            cyan
 		git:stash            cyan
@@ -1223,6 +1229,7 @@ prompt_pure_setup() {
 	#   psvar[21] = Node.js version (e.g. ⬢22)
 	#   psvar[22] = custom prefix (set by prompt_pure_precustom)
 	#   psvar[23] = custom suffix (set by prompt_pure_precustom)
+	#   psvar[24] = git section flag, set when any of [14-18] is
 	#
 	# Example output:
 	#   prefix ✦ user@host ~/Code/pure main* rebase ⇣⇡ ≡ ⬢22 3s suffix
@@ -1244,11 +1251,17 @@ prompt_pure_setup() {
 	fi
 	PROMPT+='%(13V.%F{$prompt_pure_colors['"${prompt_pure_state[user_color]:-user}"']}%n%f'"${hostname_part}"' .)'
 	prompt_pure_set_path_separator
+	# The path and the git section each in delimiters, to separate them.
+	local open='%F{$prompt_pure_colors[delimiter]}[%f' close='%F{$prompt_pure_colors[delimiter]}]%f'
+	PROMPT+=$open
 	PROMPT+='${${prompt_pure_path_separator_dimmed:+$(prompt_pure_render_dimmed_path)}:-${prompt_pure_path_segment}}'
-	PROMPT+='%(14V. %F{${prompt_pure_git_branch_color}}%14v%(15V.%F{$prompt_pure_colors[git:dirty]}%15v.)%f.)'
+	PROMPT+=$close
+	PROMPT+='%(24V. '$open
+	PROMPT+='%(14V.%F{${prompt_pure_git_branch_color}}%14v%(15V.%F{$prompt_pure_colors[git:dirty]}%15v.)%f.)'
 	PROMPT+='%(16V. %F{$prompt_pure_colors[git:action]}%16v%f.)'
 	PROMPT+='%(17V. %F{$prompt_pure_colors[git:arrow]}%17v%f.)'
 	PROMPT+='%(18V. %F{$prompt_pure_colors[git:stash]}%18v%f.)'
+	PROMPT+=$close'.)'
 	PROMPT+='%(21V. %F{$prompt_pure_colors[node_version]}%21v%f.)'
 	PROMPT+='%(23V. %F{$prompt_pure_colors[custom:suffix]}%23v%f.)'
 
