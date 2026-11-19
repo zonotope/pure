@@ -1257,7 +1257,7 @@ prompt_pure_setup() {
 	PROMPT+='${${prompt_pure_path_separator_dimmed:+$(prompt_pure_render_dimmed_path)}:-${prompt_pure_path_segment}}'
 	PROMPT+=$close
 	PROMPT+='%(24V. '$open
-	PROMPT+='%(14V.%F{${prompt_pure_git_branch_color}}%14v%(15V.%F{$prompt_pure_colors[git:dirty]}%15v.)%f.)'
+	PROMPT+='%(14V.%F{${prompt_pure_git_branch_color}} %14v%(15V. %F{$prompt_pure_colors[git:dirty]}%15v.)%f.)'
 	PROMPT+='%(16V. %F{$prompt_pure_colors[git:action]}%16v%f.)'
 	PROMPT+='%(17V. %F{$prompt_pure_colors[git:arrow]}%17v%f.)'
 	PROMPT+='%(18V. %F{$prompt_pure_colors[git:stash]}%18v%f.)'
