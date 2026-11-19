@@ -1232,8 +1232,10 @@ prompt_pure_setup() {
 	#   psvar[24] = git section flag, set when any of [14-18] is
 	#
 	# Example output:
-	#   prefix ✦ user@host ~/Code/pure main* rebase ⇣⇡ ≡ ⬢22 3s suffix
-	#   myenv ❯
+	#   took 3s
+	#   ----------------------------------------
+	#   prefix ✦ [~/Code/pure] [ main * rebase ⇣⇡ ≡] ⬢22 suffix
+	#   myenv % ❯                                          user@host
 	#
 	# The previous command's execution time, on a line of its own above the
 	# separator, so it reads as the end of that command's output.
@@ -1245,11 +1247,6 @@ prompt_pure_setup() {
 	# Preprompt line: each %(NV..) section only renders when its psvar is non-empty.
 	PROMPT+='%(22V.%F{$prompt_pure_colors[custom:prefix]}%22v%f .)'
 	PROMPT+='%(12V.%F{$prompt_pure_colors[suspended_jobs]}%12v%f .)'
-	local hostname_part=''
-	if (( prompt_pure_state[show_host] )); then
-		hostname_part='%F{$prompt_pure_colors[host]}@%m%f'
-	fi
-	PROMPT+='%(13V.%F{$prompt_pure_colors['"${prompt_pure_state[user_color]:-user}"']}%n%f'"${hostname_part}"' .)'
 	prompt_pure_set_path_separator
 	# The path and the git section each in delimiters, to separate them.
 	local open='%F{$prompt_pure_colors[delimiter]}[%f' close='%F{$prompt_pure_colors[delimiter]}]%f'
@@ -1305,9 +1302,14 @@ prompt_pure_setup() {
 	# add colors to highlight essential parts like file and function name.
 	PROMPT4="${ps4_parts[depth]} ${ps4_symbols}${ps4_parts[prompt]}"
 
-	# Pure does not use a right-side prompt. Clear RPROMPT to prevent
-	# frameworks (e.g. Prezto) from leaking a previous theme's RPROMPT.
-	RPROMPT=
+	# Right-side prompt: `username@host', when psvar[13] flags it (SSH,
+	# containers, root).  Always assigned, so frameworks (e.g. Prezto) cannot
+	# leak a previous theme's RPROMPT.
+	local hostname_part=''
+	if (( prompt_pure_state[show_host] )); then
+		hostname_part='%F{$prompt_pure_colors[host]}@%m%f'
+	fi
+	RPROMPT='%(13V.%F{$prompt_pure_colors['"${prompt_pure_state[user_color]:-user}"']}%n%f'"${hostname_part}"'.)'
 
 	# Guard against Oh My Zsh themes overriding Pure.
 	unset ZSH_THEME
